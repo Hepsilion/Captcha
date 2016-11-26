@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import libsvm.core.*;
 
-class svm_predict {
+public class svm_predict {
 	private static svm_print_interface svm_print_null = new svm_print_interface()
 	{
 		public void print(String s) {}
