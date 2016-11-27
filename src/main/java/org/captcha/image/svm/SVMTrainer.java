@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.captcha.image.util.Constants;
+
 import libsvm.svm_train;
 
 public class SVMTrainer{
@@ -20,12 +22,11 @@ public class SVMTrainer{
 	public SVMTrainer(){
 		labelMap=new HashMap<String, Integer>();
 		imageMap=new HashMap<String, ArrayList<Integer[][]>>();
+		SVMDataPreparer.produceImageLabel();
 		SVMDataPreparer.loadImageLabel(labelMap);
-		SVMDataPreparer.loadImageForTrain(imageMap);
-		SVMDataPreparer.transformData2SvmFormatForTrain(labelMap, imageMap);
 	}
 	
-	public static void run(String[] args){
+	private void run(String[] args){
 		try {
 			System.out.println("训练开始");
 			svm_train.main(args);
@@ -36,12 +37,14 @@ public class SVMTrainer{
 	}
 	
 	public void train(String[] args){
+		SVMDataPreparer.loadImageForTrain(imageMap);
+		SVMFormater.transformData2SvmFormatForTrain(labelMap, imageMap);
 		run(args);
 	}
 	
 	public static void main(String[] args){
 		//train参数
-		String[] arg = {"-t","0","svm/svm.train","svm/svm.model"};
+		String[] arg = {"-t", "0", Constants.SVM_TRAN_FILE, Constants.SVM_MODEL_FILE};
 		SVMTrainer trainer=new SVMTrainer();
 		trainer.train(arg);
 	}
